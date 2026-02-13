@@ -1,299 +1,178 @@
 # 📚 달성군립도서관 도서 검색
 
-달성군립도서관에 소장된 도서를 검색할 수 있는 웹사이트입니다.
+대구광역시 공공도서관 단행자료 현황 데이터를 활용한 달성군립도서관 도서 검색 웹사이트입니다.
 
-## 🌐 접속 주소
+## 🌐 라이브 사이트
 
-https://pashkite.github.io/libbook
+https://pashkite.github.io/libbook/
 
-> ⚠️ **첫 접속 전 필수 설정**: GitHub Pages를 활성화해야 웹사이트가 작동합니다. 아래 "GitHub Pages 활성화" 섹션을 참고하세요.
+## ✨ 기능
 
-## 🎯 GitHub Pages 활성화 (필수!)
-
-웹사이트를 온라인에서 접속하려면 GitHub Pages를 활성화해야 합니다.
-
-### 활성화 방법
-
-1. **GitHub 저장소 접속**: https://github.com/pashkite/libbook
-2. **Settings 탭 클릭**: 저장소 상단 메뉴에서 `Settings` 선택
-3. **Pages 메뉴 선택**: 왼쪽 사이드바에서 `Pages` 클릭
-4. **Source 설정**:
-   - Branch: `main` 선택
-   - Folder: `/ (root)` 선택
-   - `Save` 버튼 클릭
-5. **배포 완료 대기**: 1-2분 정도 기다리면 웹사이트가 배포됩니다
-6. **접속 확인**: https://pashkite.github.io/libbook 에서 확인
-
-### 배포 상태 확인
-
-- `Actions` 탭에서 `pages build and deployment` 워크플로우 실행 상태를 확인할 수 있습니다.
-- 녹색 체크 표시가 나타나면 배포가 완료된 것입니다.
-
-## ✨ 주요 기능
-
-### 🔄 데이터 새로고침 (신규!)
-- **원클릭 새로고침 버튼**: 웹사이트 상단에 "데이터 새로고침" 버튼
-  - 클릭 하나로 최신 도서 데이터 가져오기
-  - GitHub Actions 실행 없이 빠르게 업데이트
-  - 성공 시 녹색 알림 표시
-
-- **자동 일일 체크**: 하루에 한 번 자동으로 최신 데이터 확인
-  - 첫 번째 접속 시 자동으로 최신 데이터 로드
-  - 24시간마다 캐시 자동 갱신
-  - 별도 조작 불필요
-
-### 🔍 검색 기능
-- **도서명 검색**: 책 제목으로 검색
-- **저자 검색**: 저자명으로 검색
-- **출판사 검색**: 출판사명으로 검색
-- **통합 검색**: 위 세 가지를 동시에 검색
-
-### 📅 필터링
-- **배가일자 필터**
-  - 전체
-  - 2026년
-  - 2025년
-  - 2024년 이후
-
-### 📊 정렬
-- 최신순 (기본)
-- 오래된순
-- 제목순 (가나다순)
-
-### 📱 반응형 디자인
-- 모바일, 태블릿, 데스크톱 모든 기기에서 최적화된 화면
-- 직관적인 사용자 인터페이스
-
-### 📄 페이지네이션
-- 한 페이지에 20권씩 표시
-- 이전/다음 페이지 이동
-- 페이지 번호 직접 선택
-
-## 🤖 자동 업데이트
-
-GitHub Actions를 통해 매주 월요일 오전 9시(KST)에 자동으로 도서 데이터가 업데이트됩니다.
-
-### 데이터 새로고침 방법 (3가지)
-
-#### 1. 웹사이트에서 직접 새로고침 (추천! ⭐)
-1. 웹사이트 접속 (https://pashkite.github.io/libbook)
-2. 상단 오른쪽 "데이터 새로고침" 버튼 클릭
-3. 잘까만요! 최신 데이터가 자동으로 로드됩니다
-
-> 💡 **팝**: 하루에 한 번 웹사이트를 접속하면 자동으로 최신 데이터를 확인합니다!
-
-#### 2. GitHub Actions로 수동 실행
-1. GitHub 저장소 접속
-2. `Actions` 탭 클릭
-3. `Update Library Books Data` 워크플로우 선택
-4. `Run workflow` 버튼 클릭
-5. 실행 완료 후 웹사이트에서 최신 데이터 확인
-
-#### 3. 자동 주간 업데이트
-- 매주 월요일 오전 9시(KST)에 자동 실행
-- 별도 조작 불필요
-
-## 📊 데이터 소스
-
-- **출처**: [공공데이터포털](https://www.data.go.kr/data/15089203/fileData.do)
-- **데이터셋**: 대구광역시_공공도서관 단행자료현황
-- **필터**: 달성군립도서관 소장 도서만 추출
+- 텍스트 기반 도서 검색 (도서명, 저자, 출판사)
+- 배가일자별 필터링
+- 다양한 정렬 옵션 (최신순, 오래된순, 제목순)
+- 페이지네이션
+- 반응형 디자인 (모바일 지원)
+- 데이터 실시간 새로고침 기능
+- 자동 데이터 업데이트 (GitHub Actions)
 
 ## 🛠️ 기술 스택
 
-### Frontend
-- 순수 HTML5
-- CSS3 (반응형 디자인)
-- Vanilla JavaScript (ES6+)
-- LocalStorage (캐시 관리)
+- **Frontend**: HTML, CSS, JavaScript (Vanilla JS)
+- **Data Processing**: Python (pandas, openpyxl, requests)
+- **Automation**: GitHub Actions
+- **Hosting**: GitHub Pages
+- **Data Source**: 공공데이터포털 - 대구광역시 공공도서관 단행자료현황
 
-### Backend & Automation
-- Python 3.11
-  - pandas (데이터 처리)
-  - openpyxl (엑셀 파일 읽기)
-  - requests (HTTP 요청)
-- GitHub Actions (자동화)
-- GitHub Pages (호스팅)
+## 📄 데이터 소스
 
-### Data
-- JSON 형식
-- 클라이언트 사이드 렌더링
-- 자동 캐시 무효화 (24시간)
+공공데이터포털의 "대구광역시_공공도서관 단행자료현황" 데이터를 사용합니다.
+- 데이터셋 URL: https://www.data.go.kr/data/15089203/fileData.do
 
-## 📁 프로젝트 구조
+### ⚠️ 주요 사항
 
-```
-libbook/
-├── index.html                  # 메인 웹 페이지
-├── books.json                  # 도서 데이터 (자동 생성)
-├── README.md                   # 프로젝트 설명서
-├── .gitignore                  # Git 제외 파일
-├── .nojekyll                   # Jekyll 비활성화
-├── .github/
-│   └── workflows/
-│       └── update-data.yml     # GitHub Actions 워크플로우
-└── scripts/
-    └── fetch_books.py          # 데이터 수집 스크립트
-```
+현재 저장소에는 **샘플 데이터가 포함**되어 있습니다. 실제 도서관 데이터를 사용하려면:
 
-## 🚀 로컬 개발
+1. **공공데이터포털 API 키 발급 필요**: 현재 Python 스크립트는 API 키 없이 파일 다운로드를 시도하기 때문에 실패합니다.
+2. **수동 데이터 업로드**: 공공데이터포털에서 XLSX 파일을 수동으로 다운로드하여 저장소의 `library_data.xlsx`로 업로드할 수 있습니다.
 
-### 필요 조건
-- Python 3.11 이상
-- pip (Python 패키지 관리자)
+## 🚀 설치 및 실행
 
-### 설치 방법
+### 1. 저장소 포크
 
-1. 저장소 클론
 ```bash
 git clone https://github.com/pashkite/libbook.git
 cd libbook
 ```
 
-2. Python 의존성 설치
-```bash
-pip install pandas openpyxl requests
-```
+### 2. 로컬 테스트
 
-3. 데이터 수집 스크립트 실행
-```bash
-python scripts/fetch_books.py
-```
+로컬 서버로 실행:
 
-4. 로컬 서버 실행
 ```bash
 python -m http.server 8000
 ```
 
-5. 브라우저에서 접속
-```
-http://localhost:8000
-```
+그리고 브라우저에서 `http://localhost:8000` 접속
 
-## 📝 데이터 스크립트 사용법
+### 3. GitHub Pages 설정
 
-### 기본 실행
+1. GitHub 저장소의 Settings > Pages로 이동
+2. Source: "Deploy from a branch" 선택
+3. Branch: `main` / `/ (root)` 선택
+4. Save 클릭
+
+몇 분 후 https://[username].github.io/libbook/ 에서 확인 가능
+
+## 🔄 데이터 업데이트
+
+### 자동 업데이트
+
+- **매주 월요일 오전 9시(KST)** 자동 실행
+- GitHub Actions에서 자동으로 데이터 다운로드 및 업데이트
+
+### 수동 업데이트
+
+1. **GitHub Actions 사용**:
+   - 저장소의 Actions 탭으로 이동
+   - "Update Library Books Data" 워크플로우 선택
+   - "Run workflow" 버튼 클릭
+
+2. **로컬에서 실행**:
+
 ```bash
 python scripts/fetch_books.py
 ```
 
-### 스크립트 동작
-1. 공공데이터포털에서 XLSX 파일 다운로드
-2. 달성군립도서관 도서만 필터링
-3. JSON 형식으로 변환 (`books.json` 생성)
-4. 최종 업데이트 시간 기록
+### 실제 데이터 사용하기
 
-### 주의사항
-- 공공데이터포털 접근이 차단될 경우, 수동으로 파일을 다운로드하여 `library_data.xlsx` 파일명으로 저장하세요.
-- 필터링 키워드: 달성, 다사, 논공, 유가, 옥포, 화원, 구지
+#### 방법 1: 수동 다운로드 (권장)
 
-## 🔧 커스터마이징
+1. https://www.data.go.kr/data/15089203/fileData.do 접속
+2. "대구광역시_공공도서관 단행자료현황" XLSX 파일 다운로드
+3. 저장소 루트에 `library_data.xlsx` 파일명으로 저장
+4. `python scripts/fetch_books.py` 실행
+5. 생성된 `books.json` 파일을 커밋 및 푸시
 
-### 필터링 키워드 변경
-`scripts/fetch_books.py` 파일의 `LIBRARY_KEYWORDS` 변수 수정:
+#### 방법 2: API 키 설정 (향후 개선 예정)
 
-```python
-LIBRARY_KEYWORDS = ["달성", "다사", "논공", "유가", "옥포", "화원", "구지"]
+향후 버전에서 API 키를 사용하도록 스크립트를 개선할 예정입니다.
+
+## 🤔 문제 해결
+
+### 사이트에서 데이터가 표시되지 않아요
+
+1. **books.json 파일 확인**: 저장소에 `books.json` 파일이 있는지 확인
+2. **GitHub Pages 빌드 상태**: Settings > Pages에서 배포 상태 확인
+3. **캐시 문제**: 브라우저 강력 새로고침 (Ctrl+Shift+R / Cmd+Shift+R)
+4. **사이트의 '데이터 새로고침' 버튼 클릭**
+
+### GitHub Actions가 실패해요
+
+현재는 정상입니다! 공공데이터포털에서 데이터 다운로드가 실패하면:
+- 스크립트는 자동으로 샘플 데이터를 생성합니다
+- 실제 데이터는 위의 "실제 데이터 사용하기" 섹션 참고
+
+### 필터링이 작동하지 않아요
+
+- `books.json` 파일의 `library` 필드에 "달성", "다사", "논공" 등의 키워드가 포함되어 있는지 확인
+- Python 스크립트의 `LIBRARY_KEYWORDS` 변수를 수정하여 재실행
+
+## 💻 개발 가이드
+
+### 프로젝트 구조
+
+```
+libbook/
+├── index.html              # 메인 웹 페이지
+├── books.json              # 도서 데이터 (JSON)
+├── .nojekyll              # Jekyll 빌드 비활성화
+├── scripts/
+│   └── fetch_books.py     # 데이터 다운로드 및 변환 스크립트
+├── .github/
+│   └── workflows/
+│       └── update-data.yml # GitHub Actions 워크플로우
+└── README.md
 ```
 
-### 자동 업데이트 주기 변경
-`.github/workflows/update-data.yml` 파일의 `cron` 값 수정:
+### Python 스크립트 수정
 
-```yaml
-schedule:
-  - cron: '0 0 * * 1'  # 매주 월요일 오전 9시 (UTC 0시)
+`scripts/fetch_books.py`를 수정하여:
+- 다른 도서관 필터링
+- 추가 데이터 필드 처리
+- 데이터 포맷 변경
+
+### 웹 인터페이스 커스터마이징
+
+`index.html`의 CSS 변수를 수정하여 색상 테마 변경:
+
+```css
+:root {
+    --color-primary: #2563eb;        /* 메인 색상 */
+    --color-primary-hover: #1d4ed8;  /* 호버 색상 */
+    --color-success: #10b981;        /* 성공 메시지 색상 */
+    /* ... */
+}
 ```
 
-### 페이지당 도서 수 변경
-`index.html` 파일의 `itemsPerPage` 변수 수정:
-
-```javascript
-const itemsPerPage = 20;  // 원하는 숫자로 변경
-```
-
-### 자동 새로고침 주기 변경
-`index.html` 파일의 `CACHE_DURATION` 변수 수정:
-
-```javascript
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24시간 (밀리초)
-```
-
-## 🐛 문제 해결
-
-### GitHub Pages가 작동하지 않음
-1. **Settings > Pages 확인**
-   - Source가 `main` 브랜치의 `/ (root)`로 설정되어 있는지 확인
-2. **Actions 탭 확인**
-   - `pages build and deployment` 워크플로우가 성공적으로 실행되었는지 확인
-3. **캐시 삭제**
-   - 브라우저 캐시를 삭제하고 다시 시도
-4. **대기 시간**
-   - 첫 배포는 최대 10분 정도 소요될 수 있습니다
-
-### books.json 파일이 없다는 오류
-1. GitHub Actions가 실행되지 않았을 수 있습니다.
-2. Actions 탭에서 `Update Library Books Data` 워크플로우를 수동으로 실행하세요.
-3. 또는 로컬에서 `python scripts/fetch_books.py` 실행 후 커밋하세요.
-
-### 데이터가 업데이트되지 않음
-1. **웹사이트에서 새로고침 버튼 클릭**
-   - 가장 빠르고 쉬운 방법!
-   - 캐시를 무시하고 최신 데이터를 가져옵니다
-
-2. **GitHub Actions 로그 확인**
-   - Actions 탭에서 실행 로그를 확인하세요.
-
-3. **데이터 구조 변경**
-   - 공공데이터포털의 데이터 구조가 변경되었을 수 있습니다.
-   - `fetch_books.py` 스크립트의 컬럼 매핑을 확인하세요.
-
-4. **수동 데이터 업데이트**
-   - 공공데이터포털에서 수동으로 파일을 다운로드하여 `library_data.xlsx`로 저장
-   - 로컬에서 스크립트 실행 후 커밋
-
-### 웹사이트가 비어있거나 샘플 데이터만 표시됨
-1. **실제 데이터 업데이트 필요**
-   - 현재 샘플 데이터(5권)만 포함되어 있습니다.
-   - Actions 탭에서 `Update Library Books Data`를 실행하여 실제 데이터를 다운로드하세요.
-
-2. **공공데이터포털 접근 확인**
-   - 스크립트가 공공데이터포털에 정상적으로 접근할 수 있는지 확인
-
-### 데이터 새로고침 버튼이 작동하지 않음
-1. **브라우저 콘솔 확인**
-   - F12 키를 누르고 Console 탭에서 오류 메시지 확인
-
-2. **LocalStorage 초기화**
-   - 브라우저 콘솔에서 `localStorage.removeItem('libbook_last_check')` 실행
-   - 페이지 새로고침
-
-3. **캐시 완전 삭제**
-   - 브라우저 설정에서 해당 사이트의 모든 데이터 삭제
-
-## 📄 라이선스
+## 📝 라이선스
 
 MIT License
 
-## 👤 개발자
+## 🙏 기여
 
-- GitHub: [@pashkite](https://github.com/pashkite)
+기여를 환영합니다!
 
-## 🙏 감사의 말
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-- 데이터 제공: 공공데이터포털
-- 호스팅: GitHub Pages
-- 자동화: GitHub Actions
+## 📧 문의
 
-## 📋 체크리스트
-
-처음 설정할 때 다음 항목들을 확인하세요:
-
-- [ ] GitHub Pages 활성화 (Settings > Pages에서 `main` 브랜치 선택)
-- [ ] GitHub Actions 실행 (Actions 탭에서 `Update Library Books Data` 실행)
-- [ ] 웹사이트 접속 확인 (https://pashkite.github.io/libbook)
-- [ ] 실제 도서 데이터 확인 (샘플 데이터가 아닌 실제 달성군립도서관 도서 데이터)
-- [ ] 데이터 새로고침 버튼 테스트 (웹사이트에서 버튼 클릭 후 데이터 로드 확인)
+문제가 있거나 개선 제안이 있으면 [Issues](https://github.com/pashkite/libbook/issues)에 등록해주세요.
 
 ---
 
-⭐ 이 프로젝트가 도움이 되셨다면 GitHub Star를 눌러주세요!
+**Made with ❤️ for 달성군립도서관**
