@@ -8,6 +8,8 @@
         :root {
             --color-primary: #2563eb;
             --color-primary-hover: #1d4ed8;
+            --color-success: #10b981;
+            --color-success-hover: #059669;
             --color-bg: #f8fafc;
             --color-surface: #ffffff;
             --color-text: #1e293b;
@@ -43,15 +45,84 @@
             box-shadow: 0 2px 8px var(--color-shadow);
         }
 
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
         h1 {
             font-size: 28px;
-            margin-bottom: 10px;
             color: var(--color-primary);
+        }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background-color: var(--color-success);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            background-color: var(--color-success-hover);
+            transform: translateY(-1px);
+        }
+
+        .refresh-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .refresh-btn.loading {
+            background-color: #9ca3af;
+        }
+
+        .refresh-icon {
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .refresh-btn.loading .refresh-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .subtitle {
             color: var(--color-text-secondary);
             font-size: 14px;
+        }
+
+        .refresh-status {
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+            color: #166534;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .refresh-status.show {
+            display: flex;
         }
 
         .search-section {
@@ -259,8 +330,18 @@
         }
 
         @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
             h1 {
                 font-size: 24px;
+            }
+
+            .refresh-btn {
+                width: 100%;
+                justify-content: center;
             }
 
             .search-box {
@@ -282,9 +363,19 @@
 <body>
     <div class="container">
         <header>
-            <h1>📚 달성군립도서관 도서 검색</h1>
+            <div class="header-top">
+                <h1>📚 달성군립도서관 도서 검색</h1>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
+                    <span class="refresh-icon">🔄</span>
+                    <span id="refreshBtnText">데이터 새로고침</span>
+                </button>
+            </div>
             <p class="subtitle">대구광역시 공공도서관 단행자료 현황 (공공데이터포털)</p>
         </header>
+
+        <div class="refresh-status" id="refreshStatus">
+            ✅ 데이터가 성공적으로 업데이트되었습니다.
+        </div>
 
         <div class="search-section">
             <div class="search-box">
@@ -333,11 +424,21 @@
         let filteredBooks = [];
         let currentPage = 1;
         const itemsPerPage = 20;
+        const CACHE_KEY = 'libbook_last_check';
+        const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24시간 (밀리초)
 
         // 페이지 로드 시 데이터 가져오기
-        async function loadBooks() {
+        async function loadBooks(forceRefresh = false) {
             try {
-                const response = await fetch('books.json');
+                // 캐시 확인: 오늘 이미 체크했는지 확인
+                const lastCheck = localStorage.getItem(CACHE_KEY);
+                const now = new Date().getTime();
+                const shouldRefresh = forceRefresh || !lastCheck || (now - parseInt(lastCheck)) > CACHE_DURATION;
+
+                // URL에 타임스탬프 추가하여 캐시 방지
+                const timestamp = shouldRefresh ? `?t=${now}` : '';
+                const response = await fetch(`books.json${timestamp}`);
+                
                 if (!response.ok) {
                     throw new Error('데이터를 불러올 수 없습니다.');
                 }
@@ -350,11 +451,52 @@
                         `최종 업데이트: ${data.last_updated}`;
                 }
 
+                // 마지막 체크 시간 저장
+                if (shouldRefresh) {
+                    localStorage.setItem(CACHE_KEY, now.toString());
+                }
+
                 performSearch();
+
+                // 강제 새로고침이면 성공 메시지 표시
+                if (forceRefresh) {
+                    showRefreshStatus();
+                }
             } catch (error) {
                 document.getElementById('bookList').innerHTML = 
                     `<div class="error">오류: ${error.message}<br/>books.json 파일이 생성되지 않았을 수 있습니다.</div>`;
             }
+        }
+
+        // 데이터 새로고침 버튼 클릭
+        async function refreshData() {
+            const btn = document.getElementById('refreshBtn');
+            const btnText = document.getElementById('refreshBtnText');
+            
+            // 버튼 비활성화 및 로딩 표시
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btnText.textContent = '새로고침 중...';
+
+            try {
+                await loadBooks(true); // 강제 새로고침
+            } finally {
+                // 버튼 활성화
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.classList.remove('loading');
+                    btnText.textContent = '데이터 새로고침';
+                }, 1000);
+            }
+        }
+
+        // 성공 메시지 표시
+        function showRefreshStatus() {
+            const status = document.getElementById('refreshStatus');
+            status.classList.add('show');
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 3000);
         }
 
         // 검색 및 필터링
@@ -532,7 +674,7 @@
             }
         });
 
-        // 페이지 로드 시 데이터 불러오기
+        // 페이지 로드 시 데이터 불러오기 (자동 일일 체크)
         loadBooks();
     </script>
 </body>
