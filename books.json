@@ -1,51 +1,26 @@
 {
-  "last_updated": "2026-02-13 20:15:00",
-  "total_count": 5,
+  "last_updated": "2026-02-13 11:47:11",
+  "total_count": 500,
+  "source": "시뮬레이션 데이터 (공공데이터포털 접근 제한으로 생성)",
+  "filter": "달성군립도서관",
   "books": [
     {
-      "title": "달성의 역사와 문화",
-      "author": "김대구",
-      "publisher": "대구출판사",
-      "publication_year": "2024",
-      "registration_number": "DS001234",
-      "shelving_date": "20240115",
+      "title": "파친코",
+      "author": "이민진",
+      "publisher": "문학동네",
+      "publication_year": "2022",
+      "registration_number": "DS000001",
+      "shelving_date": "20240606",
       "library": "달성군립도서관"
     },
     {
-      "title": "논공읍 이야기",
-      "author": "이달성",
-      "publisher": "향토문화사",
-      "publication_year": "2025",
-      "registration_number": "DS002345",
-      "shelving_date": "20250203",
-      "library": "논공도서관"
-    },
-    {
-      "title": "다사읍의 사계",
-      "author": "박다사",
-      "publisher": "계절출판",
-      "publication_year": "2025",
-      "registration_number": "DS003456",
-      "shelving_date": "20250515",
+      "title": "82년생 김지영",
+      "author": "조남주",
+      "publisher": "민음사",
+      "publication_year": "2023",
+      "registration_number": "DS000002",
+      "shelving_date": "20250403",
       "library": "다사도서관"
-    },
-    {
-      "title": "화원읍 꽃이야기",
-      "author": "최화원",
-      "publisher": "꽃담출판",
-      "publication_year": "2026",
-      "registration_number": "DS004567",
-      "shelving_date": "20260120",
-      "library": "화원도서관"
-    },
-    {
-      "title": "유가읍 전통시장",
-      "author": "정유가",
-      "publisher": "시장문화사",
-      "publication_year": "2026",
-      "registration_number": "DS005678",
-      "shelving_date": "20260210",
-      "library": "유가도서관"
     }
   ]
 }
