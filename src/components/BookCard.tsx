@@ -4,16 +4,22 @@ import { Book } from './types';
 
 interface BookCardProps {
   book: Book;
+  rank?: number;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ book }) => {
+const BookCard: React.FC<BookCardProps> = ({ book, rank }) => {
   const formatDate = (dateStr: string) => {
     if (!dateStr || dateStr.length < 8) return dateStr;
     return `${dateStr.substring(0, 4)}-${dateStr.substring(4, 6)}-${dateStr.substring(6, 8)}`;
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4 hover:shadow-lg transition-shadow duration-200 border border-gray-200">
+    <div className="bg-gray-50 rounded-lg p-4 hover:shadow-lg transition-shadow duration-200 border border-gray-200 relative">
+      {rank && (
+        <div className="absolute top-2 right-2 bg-teal-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+          {rank}
+        </div>
+      )}
       <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
         <div className="w-full sm:w-24 h-32 bg-gradient-to-br from-teal-400 to-teal-600 rounded flex-shrink-0 flex items-center justify-center overflow-hidden mx-auto sm:mx-0">
           {book.coverImage ? (

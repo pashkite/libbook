@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import { Book } from './types';
 
-const BookListContainer: React.FC = () => {
+interface BookListContainerProps {
+  filter: 'all' | 'new' | 'popular';
+}
+
+const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,15 +15,14 @@ const BookListContainer: React.FC = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    // 기존 books.json 데이터 로드 - 루트와 public 둘 다 시도
     const fetchBooks = async () => {
+      setLoading(true);
       try {
         let response = await fetch('/books.json');
         if (!response.ok) {
           response = await fetch('../books.json');
         }
         const data = await response.json();
-        // 기존 데이터를 Book 타입으로 변환
         const transformedBooks: Book[] = (data.books || []).map((book: any, index: number) => ({
           id: book.registration_number || String(index),
           title: book.title,
@@ -28,7 +31,8 @@ const BookListContainer: React.FC = () => {
           callNumber: book.registration_number,
           acquisitionDate: book.shelving_date,
           status: Math.random() > 0.7 ? 'checked_out' : 'available',
-          dueDate: Math.random() > 0.7 ? '2026-02-20' : undefined
+          dueDate: Math.random() > 0.7 ? '2026-02-20' : undefined,
+          popularity: Math.floor(Math.random() * 100) + 1
         }));
         setBooks(transformedBooks);
         setLoading(false);
@@ -40,22 +44,54 @@ const BookListContainer: React.FC = () => {
     fetchBooks();
   }, []);
 
-  // 검색 및 정렬
-  const filteredBooks = books
-    .filter(book => 
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortBy === 'latest') return b.acquisitionDate.localeCompare(a.acquisitionDate);
-      if (sortBy === 'oldest') return a.acquisitionDate.localeCompare(b.acquisitionDate);
-      return a.title.localeCompare(b.title);
-    });
+  // 필터링
+  const getFilteredBooks = () => {
+    let filtered = [...books];
+
+    // 탭 필터 적용
+    if (filter === 'new') {
+      // 최근 3개월 이내 도서
+      const threeMonthsAgo = new Date();
+      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+      const threshold = threeMonthsAgo.toISOString().slice(0, 10).replace(/-/g, '');
+      filtered = filtered.filter(book => book.acquisitionDate >= threshold);
+    } else if (filter === 'popular') {
+      // 인기도 기준 상위 30권
+      filtered = filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 30);
+    }
+
+    // 검색어 필터
+    if (searchTerm) {
+      filtered = filtered.filter(book => 
+        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    return filtered;
+  };
+
+  const filteredBooks = getFilteredBooks();
+
+  // 정렬
+  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    if (filter === 'popular') {
+      return (b.popularity || 0) - (a.popularity || 0);
+    }
+    if (sortBy === 'latest') return b.acquisitionDate.localeCompare(a.acquisitionDate);
+    if (sortBy === 'oldest') return a.acquisitionDate.localeCompare(b.acquisitionDate);
+    return a.title.localeCompare(b.title);
+  });
 
   // 페이지네이션
-  const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+  const totalPages = Math.ceil(sortedBooks.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const displayBooks = filteredBooks.slice(startIndex, startIndex + itemsPerPage);
+  const displayBooks = sortedBooks.slice(startIndex, startIndex + itemsPerPage);
+
+  // 탭 변경 시 페이지 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchTerm]);
 
   if (loading) {
     return (
@@ -67,11 +103,25 @@ const BookListContainer: React.FC = () => {
     );
   }
 
+  const getTitle = () => {
+    if (filter === 'new') return '신착도서 목록 조회';
+    if (filter === 'popular') return '인기 도서 목록 조회';
+    return '전체 도서 목록 조회';
+  };
+
   return (
     <main className="flex-1">
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-gray-800">전체 도서 목록 조회</h2>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">{getTitle()}</h2>
+            {filter === 'new' && (
+              <p className="text-sm text-gray-600 mt-1">최근 3개월 이내 소장된 도서</p>
+            )}
+            {filter === 'popular' && (
+              <p className="text-sm text-gray-600 mt-1">대출 빈도가 높은 상위 30권</p>
+            )}
+          </div>
           
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             <input
@@ -81,15 +131,17 @@ const BookListContainer: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-auto"
             />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-auto"
-            >
-              <option value="latest">최신순</option>
-              <option value="oldest">오래된순</option>
-              <option value="title">제목순</option>
-            </select>
+            {filter !== 'popular' && (
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-auto"
+              >
+                <option value="latest">최신순</option>
+                <option value="oldest">오래된순</option>
+                <option value="title">제목순</option>
+              </select>
+            )}
           </div>
         </div>
 
@@ -99,8 +151,8 @@ const BookListContainer: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayBooks.map(book => (
-              <BookCard key={book.id} book={book} />
+            {displayBooks.map((book, index) => (
+              <BookCard key={book.id} book={book} rank={filter === 'popular' ? startIndex + index + 1 : undefined} />
             ))}
           </div>
         )}

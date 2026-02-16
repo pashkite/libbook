@@ -8,4 +8,5 @@ export interface Book {
   acquisitionDate: string;
   status: 'available' | 'checked_out';
   dueDate?: string;
+  popularity?: number;
 }
