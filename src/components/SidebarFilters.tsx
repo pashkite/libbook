@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import KDCFilterTree from './KDCFilterTree';
 import DateRangeFilter from './DateRangeFilter';
+import LibraryFilter from './LibraryFilter';
 
-const SidebarFilters: React.FC = () => {
+interface SidebarFiltersProps {
+  selectedLibrary: string;
+  onLibraryChange: (library: string) => void;
+}
+
+const SidebarFilters: React.FC<SidebarFiltersProps> = ({ selectedLibrary, onLibraryChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -24,11 +30,12 @@ const SidebarFilters: React.FC = () => {
         w-full lg:w-64 bg-white rounded-lg shadow-md p-4 space-y-6
         ${isOpen ? 'block' : 'hidden lg:block'}
       `}>
-        <div className="border-b pb-4">
-          <h2 className="text-lg font-bold text-gray-800">KDC 분류 탐색</h2>
-        </div>
+        <LibraryFilter selectedLibrary={selectedLibrary} onLibraryChange={onLibraryChange} />
         
-        <KDCFilterTree />
+        <div className="border-t pt-4">
+          <h2 className="text-lg font-bold text-gray-800 mb-3">KDC 분류 탐색</h2>
+          <KDCFilterTree />
+        </div>
         
         <div className="border-t pt-4">
           <h3 className="text-md font-semibold text-gray-700 mb-3">소장 기간 설정</h3>

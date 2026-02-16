@@ -5,14 +5,15 @@ import BookListContainer from './components/BookListContainer';
 
 const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'all' | 'new' | 'popular'>('all');
+  const [selectedLibrary, setSelectedLibrary] = useState<string>('all');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-green-50">
       <Header currentTab={currentTab} onTabChange={setCurrentTab} />
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          <SidebarFilters />
-          <BookListContainer filter={currentTab} />
+          <SidebarFilters selectedLibrary={selectedLibrary} onLibraryChange={setSelectedLibrary} />
+          <BookListContainer filter={currentTab} selectedLibrary={selectedLibrary} />
         </div>
       </div>
     </div>

@@ -4,15 +4,16 @@ import { Book } from './types';
 
 interface BookListContainerProps {
   filter: 'all' | 'new' | 'popular';
+  selectedLibrary: string;
 }
 
-const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
+const BookListContainer: React.FC<BookListContainerProps> = ({ filter, selectedLibrary }) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('latest');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 9;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -30,8 +31,9 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
           publisher: book.publisher,
           callNumber: book.registration_number,
           acquisitionDate: book.shelving_date,
+          library: book.library,
           status: Math.random() > 0.7 ? 'checked_out' : 'available',
-          dueDate: Math.random() > 0.7 ? '2026-02-20' : undefined,
+          dueDate: Math.random() > 0.7 ? '2026-03-15' : undefined,
           popularity: Math.floor(Math.random() * 100) + 1
         }));
         setBooks(transformedBooks);
@@ -47,6 +49,11 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
   // 필터링
   const getFilteredBooks = () => {
     let filtered = [...books];
+
+    // 도서관 필터
+    if (selectedLibrary !== 'all') {
+      filtered = filtered.filter(book => book.library === selectedLibrary);
+    }
 
     // 탭 필터 적용
     if (filter === 'new') {
@@ -91,7 +98,7 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
   // 탭 변경 시 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
-  }, [filter, searchTerm]);
+  }, [filter, searchTerm, selectedLibrary]);
 
   if (loading) {
     return (
@@ -104,22 +111,27 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
   }
 
   const getTitle = () => {
-    if (filter === 'new') return '신착도서 목록 조회';
-    if (filter === 'popular') return '인기 도서 목록 조회';
-    return '전체 도서 목록 조회';
+    if (filter === 'new') return '신착도서 목록';
+    if (filter === 'popular') return '인기 도서 목록';
+    return '도서 목록';
   };
 
   return (
     <main className="flex-1">
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">{getTitle()}</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800">{getTitle()}</h2>
+            {selectedLibrary !== 'all' && (
+              <p className="text-sm text-teal-600 mt-1">
+                {libraries.find(l => l.id === selectedLibrary)?.name || selectedLibrary}
+              </p>
+            )}
             {filter === 'new' && (
-              <p className="text-sm text-gray-600 mt-1">최근 3개월 이내 소장된 도서</p>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">최근 3개월 이내 소장된 도서</p>
             )}
             {filter === 'popular' && (
-              <p className="text-sm text-gray-600 mt-1">대출 빈도가 높은 상위 30권</p>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">대출 빈도가 높은 상위 30권</p>
             )}
           </div>
           
@@ -143,6 +155,10 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
               </select>
             )}
           </div>
+        </div>
+
+        <div className="mb-4 text-sm text-gray-600">
+          총 <span className="font-bold text-teal-600">{sortedBooks.length}</span>권의 도서
         </div>
 
         {displayBooks.length === 0 ? (
@@ -196,5 +212,21 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter }) => {
     </main>
   );
 };
+
+const libraries = [
+  { id: 'all', name: '전체 도서관' },
+  { id: '국채보상운동기념도서관', name: '국채보상운동기념도서관' },
+  { id: '대구광역시립동부도서관', name: '동부도서관' },
+  { id: '대구광역시립 남부도서관', name: '남부도서관' },
+  { id: '대구광역시립서부도서관', name: '서부도서관' },
+  { id: '대구광역시립중앙도서관', name: '중앙도서관' },
+  { id: '달성군립도서관', name: '달성군립도서관' },
+  { id: '다사도서관', name: '다사도서관' },
+  { id: '논공도서관', name: '논공도서관' },
+  { id: '유가도서관', name: '유가도서관' },
+  { id: '화원도서관', name: '화원도서관' },
+  { id: '옥포도서관', name: '옥포도서관' },
+  { id: '구지도서관', name: '구지도서관' },
+];
 
 export default BookListContainer;
