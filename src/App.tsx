@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import LibraryLayout from './components/LibraryLayout';
 import Header from './components/Header';
 import SidebarFilters from './components/SidebarFilters';
 import BookListContainer from './components/BookListContainer';
