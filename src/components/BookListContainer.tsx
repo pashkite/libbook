@@ -11,12 +11,16 @@ const BookListContainer: React.FC = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    // 기존 books.json 데이터 로드
-    fetch('/books.json')
-      .then(res => res.json())
-      .then(data => {
+    // 기존 books.json 데이터 로드 - 루트와 public 둘 다 시도
+    const fetchBooks = async () => {
+      try {
+        let response = await fetch('/books.json');
+        if (!response.ok) {
+          response = await fetch('../books.json');
+        }
+        const data = await response.json();
         // 기존 데이터를 Book 타입으로 변환
-        const transformedBooks: Book[] = data.books.map((book: any, index: number) => ({
+        const transformedBooks: Book[] = (data.books || []).map((book: any, index: number) => ({
           id: book.registration_number || String(index),
           title: book.title,
           author: book.author,
@@ -28,11 +32,12 @@ const BookListContainer: React.FC = () => {
         }));
         setBooks(transformedBooks);
         setLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error('Error loading books:', err);
         setLoading(false);
-      });
+      }
+    };
+    fetchBooks();
   }, []);
 
   // 검색 및 정렬
@@ -65,21 +70,21 @@ const BookListContainer: React.FC = () => {
   return (
     <main className="flex-1">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <h2 className="text-2xl font-bold text-gray-800">전체 도서 목록 조회</h2>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             <input
               type="text"
               placeholder="도서 검색"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-auto"
             />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-auto"
             >
               <option value="latest">최신순</option>
               <option value="oldest">오래된순</option>
@@ -88,11 +93,17 @@ const BookListContainer: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayBooks.map(book => (
-            <BookCard key={book.id} book={book} />
-          ))}
-        </div>
+        {displayBooks.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            <p>검색 결과가 없습니다.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayBooks.map(book => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+        )}
 
         {totalPages > 1 && (
           <div className="flex justify-center items-center space-x-2 mt-8">
