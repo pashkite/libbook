@@ -1,4 +1,458 @@
 {
-  "books": [],
-  "last_updated": "2026-02-16"
+  "last_updated": "2026-02-16 17:27:00",
+  "total_count": 50,
+  "source": "달성군립도서관 샘플 데이터",
+  "filter": "달성군립도서관",
+  "books": [
+    {
+      "title": "파친코",
+      "author": "이민진",
+      "publisher": "문학동네",
+      "publication_year": "2022",
+      "registration_number": "DS000001",
+      "shelving_date": "20240606",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "82년생 김지영",
+      "author": "조남주",
+      "publisher": "민음사",
+      "publication_year": "2023",
+      "registration_number": "DS000002",
+      "shelving_date": "20250403",
+      "library": "다사도서관"
+    },
+    {
+      "title": "채식주의자",
+      "author": "한강",
+      "publisher": "창비",
+      "publication_year": "2024",
+      "registration_number": "DS000003",
+      "shelving_date": "20240815",
+      "library": "논공도서관"
+    },
+    {
+      "title": "달성의 역사와 문화",
+      "author": "김대구",
+      "publisher": "대구출판사",
+      "publication_year": "2025",
+      "registration_number": "DS000004",
+      "shelving_date": "20250115",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "미드나잇 라이브러리",
+      "author": "매트 헤이그",
+      "publisher": "인플루엔셜",
+      "publication_year": "2023",
+      "registration_number": "DS000005",
+      "shelving_date": "20250320",
+      "library": "유가도서관"
+    },
+    {
+      "title": "불편한 편의점",
+      "author": "김호연",
+      "publisher": "나무옆의자",
+      "publication_year": "2024",
+      "registration_number": "DS000006",
+      "shelving_date": "20240922",
+      "library": "화원도서관"
+    },
+    {
+      "title": "트렌드 코리아 2026",
+      "author": "김난도",
+      "publisher": "미래의창",
+      "publication_year": "2025",
+      "registration_number": "DS000007",
+      "shelving_date": "20251210",
+      "library": "옥포도서관"
+    },
+    {
+      "title": "달러구트 꿈 백화점",
+      "author": "이미예",
+      "publisher": "팩토리나인",
+      "publication_year": "2023",
+      "registration_number": "DS000008",
+      "shelving_date": "20250505",
+      "library": "구지도서관"
+    },
+    {
+      "title": "작별인사",
+      "author": "김영하",
+      "publisher": "복복서가",
+      "publication_year": "2024",
+      "registration_number": "DS000009",
+      "shelving_date": "20240711",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "물고기는 존재하지 않는다",
+      "author": "룰루 밀러",
+      "publisher": "곰출판",
+      "publication_year": "2023",
+      "registration_number": "DS000010",
+      "shelving_date": "20250618",
+      "library": "다사도서관"
+    },
+    {
+      "title": "세이노의 가르침",
+      "author": "세이노",
+      "publisher": "데이원",
+      "publication_year": "2024",
+      "registration_number": "DS000011",
+      "shelving_date": "20240828",
+      "library": "논공도서관"
+    },
+    {
+      "title": "해리 포터와 마법사의 돌",
+      "author": "J.K. 롤링",
+      "publisher": "문학수첩",
+      "publication_year": "2023",
+      "registration_number": "DS000012",
+      "shelving_date": "20250204",
+      "library": "유가도서관"
+    },
+    {
+      "title": "아몬드",
+      "author": "손원평",
+      "publisher": "창비",
+      "publication_year": "2024",
+      "registration_number": "DS000013",
+      "shelving_date": "20241015",
+      "library": "화원도서관"
+    },
+    {
+      "title": "참을 수 없는 존재의 가벼움",
+      "author": "밀란 쿤데라",
+      "publisher": "민음사",
+      "publication_year": "2023",
+      "registration_number": "DS000014",
+      "shelving_date": "20250725",
+      "library": "옥포도서관"
+    },
+    {
+      "title": "논공읍 이야기",
+      "author": "이달성",
+      "publisher": "향토문화사",
+      "publication_year": "2025",
+      "registration_number": "DS000015",
+      "shelving_date": "20250203",
+      "library": "논공도서관"
+    },
+    {
+      "title": "다사읍의 사계",
+      "author": "박다사",
+      "publisher": "계절출판",
+      "publication_year": "2025",
+      "registration_number": "DS000016",
+      "shelving_date": "20250515",
+      "library": "다사도서관"
+    },
+    {
+      "title": "화원읍 꽃이야기",
+      "author": "최화원",
+      "publisher": "꽃담출판",
+      "publication_year": "2026",
+      "registration_number": "DS000017",
+      "shelving_date": "20260120",
+      "library": "화원도서관"
+    },
+    {
+      "title": "유가읍 전통시장",
+      "author": "정유가",
+      "publisher": "시장문화사",
+      "publication_year": "2026",
+      "registration_number": "DS000018",
+      "shelving_date": "20260210",
+      "library": "유가도서관"
+    },
+    {
+      "title": "백설공주 살인사건",
+      "author": "가네다 미나토",
+      "publisher": "살림",
+      "publication_year": "2024",
+      "registration_number": "DS000019",
+      "shelving_date": "20240305",
+      "library": "구지도서관"
+    },
+    {
+      "title": "아주 작은 습관의 힘",
+      "author": "제임스 클리어",
+      "publisher": "비즈니스북스",
+      "publication_year": "2023",
+      "registration_number": "DS000020",
+      "shelving_date": "20250410",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "언어의 온도",
+      "author": "이기주",
+      "publisher": "말글터",
+      "publication_year": "2024",
+      "registration_number": "DS000021",
+      "shelving_date": "20240520",
+      "library": "다사도서관"
+    },
+    {
+      "title": "데미안",
+      "author": "헤르만 헤세",
+      "publisher": "민음사",
+      "publication_year": "2023",
+      "registration_number": "DS000022",
+      "shelving_date": "20250808",
+      "library": "논공도서관"
+    },
+    {
+      "title": "멈추면 비로소 보이는 것들",
+      "author": "혜민",
+      "publisher": "쌤앤파커스",
+      "publication_year": "2024",
+      "registration_number": "DS000023",
+      "shelving_date": "20241102",
+      "library": "유가도서관"
+    },
+    {
+      "title": "코스모스",
+      "author": "칼 세이건",
+      "publisher": "사이언스북스",
+      "publication_year": "2023",
+      "registration_number": "DS000024",
+      "shelving_date": "20250917",
+      "library": "화원도서관"
+    },
+    {
+      "title": "공정하다는 착각",
+      "author": "마이클 샌델",
+      "publisher": "와이즈베리",
+      "publication_year": "2024",
+      "registration_number": "DS000025",
+      "shelving_date": "20240425",
+      "library": "옥포도서관"
+    },
+    {
+      "title": "살인자의 기억법",
+      "author": "김영하",
+      "publisher": "문학동네",
+      "publication_year": "2023",
+      "registration_number": "DS000026",
+      "shelving_date": "20250630",
+      "library": "구지도서관"
+    },
+    {
+      "title": "나미야 잡화점의 기적",
+      "author": "히가시노 게이고",
+      "publisher": "현대문학",
+      "publication_year": "2024",
+      "registration_number": "DS000027",
+      "shelving_date": "20240213",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "이기적 유전자",
+      "author": "리처드 도킨스",
+      "publisher": "을유문화사",
+      "publication_year": "2023",
+      "registration_number": "DS000028",
+      "shelving_date": "20251125",
+      "library": "다사도서관"
+    },
+    {
+      "title": "당신이 옳다",
+      "author": "정혜신",
+      "publisher": "해냄",
+      "publication_year": "2024",
+      "registration_number": "DS000029",
+      "shelving_date": "20240707",
+      "library": "논공도서관"
+    },
+    {
+      "title": "흔한남매 과학 탐험대",
+      "author": "흔한남매",
+      "publisher": "아이세움",
+      "publication_year": "2025",
+      "registration_number": "DS000030",
+      "shelving_date": "20250128",
+      "library": "유가도서관"
+    },
+    {
+      "title": "보건교사 안은영",
+      "author": "정세랑",
+      "publisher": "민음사",
+      "publication_year": "2024",
+      "registration_number": "DS000031",
+      "shelving_date": "20240910",
+      "library": "화원도서관"
+    },
+    {
+      "title": "지적 대화를 위한 넓고 얕은 지식",
+      "author": "채사장",
+      "publisher": "한빛비즈",
+      "publication_year": "2023",
+      "registration_number": "DS000032",
+      "shelving_date": "20250301",
+      "library": "옥포도서관"
+    },
+    {
+      "title": "연금술사",
+      "author": "파울로 코엘료",
+      "publisher": "문학동네",
+      "publication_year": "2024",
+      "registration_number": "DS000033",
+      "shelving_date": "20241218",
+      "library": "구지도서관"
+    },
+    {
+      "title": "천 개의 파랑",
+      "author": "천선란",
+      "publisher": "허블",
+      "publication_year": "2023",
+      "registration_number": "DS000034",
+      "shelving_date": "20250522",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "총 균 쇠",
+      "author": "재레드 다이아몬드",
+      "publisher": "김영사",
+      "publication_year": "2024",
+      "registration_number": "DS000035",
+      "shelving_date": "20240104",
+      "library": "다사도서관"
+    },
+    {
+      "title": "하얼빈",
+      "author": "김훈",
+      "publisher": "문학동네",
+      "publication_year": "2023",
+      "registration_number": "DS000036",
+      "shelving_date": "20251010",
+      "library": "논공도서관"
+    },
+    {
+      "title": "설민석의 한국사 대모험",
+      "author": "설민석",
+      "publisher": "아이휴먼",
+      "publication_year": "2025",
+      "registration_number": "DS000037",
+      "shelving_date": "20250212",
+      "library": "유가도서관"
+    },
+    {
+      "title": "이토록 공부가 재미있어지는 순간",
+      "author": "박성혁",
+      "publisher": "인플루엔셜",
+      "publication_year": "2024",
+      "registration_number": "DS000038",
+      "shelving_date": "20240803",
+      "library": "화원도서관"
+    },
+    {
+      "title": "1Q84",
+      "author": "무라카미 하루키",
+      "publisher": "문학동네",
+      "publication_year": "2023",
+      "registration_number": "DS000039",
+      "shelving_date": "20250415",
+      "library": "옥포도서관"
+    },
+    {
+      "title": "고양이 해결사 깜냥",
+      "author": "홍민정",
+      "publisher": "창비",
+      "publication_year": "2024",
+      "registration_number": "DS000040",
+      "shelving_date": "20241105",
+      "library": "구지도서관"
+    },
+    {
+      "title": "정의란 무엇인가",
+      "author": "마이클 샌델",
+      "publisher": "김영사",
+      "publication_year": "2023",
+      "registration_number": "DS000041",
+      "shelving_date": "20250708",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "러브 크래프트",
+      "author": "이경혜",
+      "publisher": "자음과모음",
+      "publication_year": "2024",
+      "registration_number": "DS000042",
+      "shelving_date": "20240318",
+      "library": "다사도서관"
+    },
+    {
+      "title": "모순",
+      "author": "양귀자",
+      "publisher": "쌤앤파커스",
+      "publication_year": "2023",
+      "registration_number": "DS000043",
+      "shelving_date": "20250920",
+      "library": "논공도서관"
+    },
+    {
+      "title": "어린왕자",
+      "author": "생텍쥐페리",
+      "publisher": "문학동네",
+      "publication_year": "2024",
+      "registration_number": "DS000044",
+      "shelving_date": "20241210",
+      "library": "유가도서관"
+    },
+    {
+      "title": "달과 6펜스",
+      "author": "서머셋 몸",
+      "publisher": "민음사",
+      "publication_year": "2023",
+      "registration_number": "DS000045",
+      "shelving_date": "20250602",
+      "library": "화원도서관"
+    },
+    {
+      "title": "스마트폰을 떨어뜨렸을 뿐인데",
+      "author": "시가 아키라",
+      "publisher": "모모",
+      "publication_year": "2024",
+      "registration_number": "DS000046",
+      "shelving_date": "20240228",
+      "library": "옥포도서관"
+    },
+    {
+      "title": "돌이킬 수 없는 약속",
+      "author": "히가시노 게이고",
+      "publisher": "재인",
+      "publication_year": "2023",
+      "registration_number": "DS000047",
+      "shelving_date": "20251113",
+      "library": "구지도서관"
+    },
+    {
+      "title": "완득이",
+      "author": "김려령",
+      "publisher": "창비",
+      "publication_year": "2024",
+      "registration_number": "DS000048",
+      "shelving_date": "20240525",
+      "library": "달성군립도서관"
+    },
+    {
+      "title": "비밀의 화원",
+      "author": "프랜시스 버넷",
+      "publisher": "시공주니어",
+      "publication_year": "2025",
+      "registration_number": "DS000049",
+      "shelving_date": "20250305",
+      "library": "다사도서관"
+    },
+    {
+      "title": "역행자",
+      "author": "자청",
+      "publisher": "웅진지식하우스",
+      "publication_year": "2024",
+      "registration_number": "DS000050",
+      "shelving_date": "20241008",
+      "library": "논공도서관"
+    }
+  ]
 }
