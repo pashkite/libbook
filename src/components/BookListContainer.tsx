@@ -29,7 +29,7 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
         let apiBooks: any[] = [];
 
         if (filter === 'new') {
-          // 신착도서: 선택된 도서관별로 조회
+          // 신챉도서: 선택된 도서관별로 조회
           if (selectedLibraries.length > 0) {
             const promises = selectedLibraries.map(libCode => 
               getNewBooks(libCode, undefined, 1, 20)
@@ -61,9 +61,8 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
             apiBooks = result.books;
           }
         } else {
-          // 전체 도서: 기본 검색 (빈 키워드로 전체 조회 시도)
-          // 또는 정적 JSON 폴백
-          const response = await fetch('/books.json').catch(() => fetch('../books.json'));
+          // 전체 도서: 정적 JSON 폴백
+          const response = await fetch('./books.json');
           const data = await response.json();
           apiBooks = data.books || [];
         }
@@ -88,7 +87,7 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
         console.error('Error loading books:', err);
         // 폴백: 정적 JSON 파일 사용
         try {
-          const response = await fetch('/books.json').catch(() => fetch('../books.json'));
+          const response = await fetch('./books.json');
           const data = await response.json();
           const fallbackBooks: Book[] = (data.books || []).map((book: any, index: number) => ({
             id: book.registration_number || String(index),
@@ -115,9 +114,6 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
   // 필터링
   const getFilteredBooks = () => {
     let filtered = [...books];
-
-    // 도서관 복수 선택 필터 (API에서 이미 처리됨)
-    // 추가 필터링은 필요없음
 
     // 검색어 필터
     if (searchTerm) {
@@ -164,7 +160,7 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
   }
 
   const getTitle = () => {
-    if (filter === 'new') return '신챙도서 목록';
+    if (filter === 'new') return '신챩도서 목록';
     if (filter === 'popular') return '인기 도서 목록';
     return '도서 목록';
   };
