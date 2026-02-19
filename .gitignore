@@ -57,3 +57,6 @@ Desktop.ini
 .env.production.local
 .env.development.local
 .env.test.local
+# Node
+node_modules/
+dist/

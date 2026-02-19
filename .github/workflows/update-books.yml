@@ -1,4 +1,4 @@
-name: Update Books Data
+name: Update Daegu Library Books
 
 on:
   schedule:
@@ -20,13 +20,13 @@ jobs:
           node-version: '20'
           
       - name: Install dependencies
-        run: npm install node-fetch
+        run: npm install
         
-      - name: Fetch library books
+      - name: Fetch Daegu library books
         env:
-          API_KEY: ${{ secrets.JEONGBONAROU_API_KEY }}
+          JEONGBONAROU_API_KEY: ${{ secrets.JEONGBONAROU_API_KEY }}
         run: |
-          node scripts/fetch-books.js
+          npm run fetch:daegu-books
           
       - name: Commit and push if changed
         run: |
@@ -34,4 +34,4 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add public/books.json
           git diff --quiet && git diff --staged --quiet || \
-            (git commit -m "chore: 도서 목록 자동 업데이트 $(date +'%Y-%m-%d')" && git push)
+            (git commit -m "chore: 대구 도서 목록 자동 업데이트 $(date +'%Y-%m-%d')" && git push)
