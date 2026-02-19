@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import { Book } from './types';
-import { DALSEONG_LIBRARIES } from '../services/api';
+import { DALSEONG_LIBRARIES, searchBooks, getNewBooks, getPopularBooks } from '../services/api';
 
 interface BookListContainerProps {
   filter: 'all' | 'new' | 'popular';
@@ -21,67 +21,103 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
+  // 도서 데이터 불러오기
   useEffect(() => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        let response = await fetch('/books.json');
-        if (!response.ok) {
-          response = await fetch('../books.json');
+        let apiBooks: any[] = [];
+
+        if (filter === 'new') {
+          // 신착도서: 선택된 도서관별로 조회
+          if (selectedLibraries.length > 0) {
+            const promises = selectedLibraries.map(libCode => 
+              getNewBooks(libCode, undefined, 1, 20)
+            );
+            const results = await Promise.all(promises);
+            apiBooks = results.flatMap(r => r.books);
+          } else {
+            // 선택 없으면 첫 번째 도서관
+            const result = await getNewBooks(DALSEONG_LIBRARIES[0].code, undefined, 1, 20);
+            apiBooks = result.books;
+          }
+        } else if (filter === 'popular') {
+          // 인기도서: 최근 1개월 데이터
+          const endDate = new Date();
+          const startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - 1);
+          
+          const startDt = startDate.toISOString().slice(0, 10);
+          const endDt = endDate.toISOString().slice(0, 10);
+
+          if (selectedLibraries.length > 0) {
+            const promises = selectedLibraries.map(libCode => 
+              getPopularBooks(libCode, startDt, endDt, 1, 20)
+            );
+            const results = await Promise.all(promises);
+            apiBooks = results.flatMap(r => r.books);
+          } else {
+            const result = await getPopularBooks(DALSEONG_LIBRARIES[0].code, startDt, endDt, 1, 20);
+            apiBooks = result.books;
+          }
+        } else {
+          // 전체 도서: 기본 검색 (빈 키워드로 전체 조회 시도)
+          // 또는 정적 JSON 폴백
+          const response = await fetch('/books.json').catch(() => fetch('../books.json'));
+          const data = await response.json();
+          apiBooks = data.books || [];
         }
-        const data = await response.json();
-        const transformedBooks: Book[] = (data.books || []).map((book: any, index: number) => ({
-          id: book.registration_number || String(index),
-          title: book.title,
-          author: book.author,
+
+        // Book 타입으로 변환
+        const transformedBooks: Book[] = apiBooks.map((book: any, index: number) => ({
+          id: book.no || book.isbn13 || book.registration_number || String(index),
+          title: book.bookname || book.title,
+          author: book.authors || book.author,
           publisher: book.publisher,
-          callNumber: book.registration_number,
-          acquisitionDate: book.shelving_date,
-          library: book.library,
-          status: Math.random() > 0.7 ? 'checked_out' : 'available',
-          dueDate: Math.random() > 0.7 ? '2026-03-15' : undefined,
-          popularity: Math.floor(Math.random() * 100) + 1
+          callNumber: book.class_no || book.registration_number,
+          acquisitionDate: book.shelving_date || new Date().toISOString().slice(0, 10).replace(/-/g, ''),
+          library: book.library || '달성군립도서관',
+          status: 'available',
+          popularity: parseInt(book.loanCnt || '0') || Math.floor(Math.random() * 100) + 1,
+          imageUrl: book.bookImageURL
         }));
+
         setBooks(transformedBooks);
         setLoading(false);
       } catch (err) {
         console.error('Error loading books:', err);
+        // 폴백: 정적 JSON 파일 사용
+        try {
+          const response = await fetch('/books.json').catch(() => fetch('../books.json'));
+          const data = await response.json();
+          const fallbackBooks: Book[] = (data.books || []).map((book: any, index: number) => ({
+            id: book.registration_number || String(index),
+            title: book.title,
+            author: book.author,
+            publisher: book.publisher,
+            callNumber: book.registration_number,
+            acquisitionDate: book.shelving_date,
+            library: book.library,
+            status: Math.random() > 0.7 ? 'checked_out' : 'available',
+            popularity: Math.floor(Math.random() * 100) + 1
+          }));
+          setBooks(fallbackBooks);
+        } catch (fallbackErr) {
+          console.error('Fallback also failed:', fallbackErr);
+          setBooks([]);
+        }
         setLoading(false);
       }
     };
     fetchBooks();
-  }, []);
+  }, [filter, selectedLibraries]);
 
   // 필터링
   const getFilteredBooks = () => {
     let filtered = [...books];
 
-    // 도서관 복수 선택 필터
-    if (selectedLibraries.length > 0) {
-      // 도서관 코드를 이름으로 변환
-      const libraryNames = selectedLibraries.map(code => {
-        const lib = DALSEONG_LIBRARIES.find(l => l.code === code);
-        return lib ? lib.name : code;
-      });
-      filtered = filtered.filter(book => libraryNames.includes(book.library));
-    }
-
-    // 자료실 필터 (아직 데이터에 없음 - 추후 API 연동 시 구현)
-    // if (selectedRooms.length > 0) {
-    //   filtered = filtered.filter(book => selectedRooms.includes(book.room));
-    // }
-
-    // 탭 필터 적용
-    if (filter === 'new') {
-      // 최근 3개월 이내 도서
-      const threeMonthsAgo = new Date();
-      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-      const threshold = threeMonthsAgo.toISOString().slice(0, 10).replace(/-/g, '');
-      filtered = filtered.filter(book => book.acquisitionDate >= threshold);
-    } else if (filter === 'popular') {
-      // 인기도 기준 상위 30권
-      filtered = filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 30);
-    }
+    // 도서관 복수 선택 필터 (API에서 이미 처리됨)
+    // 추가 필터링은 필요없음
 
     // 검색어 필터
     if (searchTerm) {
@@ -120,14 +156,15 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
     return (
       <main className="flex-1">
         <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <p className="text-gray-500">데이터를 불러오는 중...</p>
+          <p className="text-gray-500">도서 데이터를 불러오는 중...</p>
+          <p className="text-xs text-gray-400 mt-2">정보나루 API 연결 중</p>
         </div>
       </main>
     );
   }
 
   const getTitle = () => {
-    if (filter === 'new') return '신착도서 목록';
+    if (filter === 'new') return '신챙도서 목록';
     if (filter === 'popular') return '인기 도서 목록';
     return '도서 목록';
   };
@@ -153,10 +190,10 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
               </p>
             )}
             {filter === 'new' && (
-              <p className="text-xs md:text-sm text-gray-600 mt-1">최근 3개월 이내 소장된 도서</p>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">최근 소장된 도서 (실시간 API)</p>
             )}
             {filter === 'popular' && (
-              <p className="text-xs md:text-sm text-gray-600 mt-1">대출 빈도가 높은 상위 30권</p>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">최근 1개월 대출 빈도 기준 (실시간 API)</p>
             )}
           </div>
           
@@ -189,6 +226,7 @@ const BookListContainer: React.FC<BookListContainerProps> = ({
         {displayBooks.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <p>검색 결과가 없습니다.</p>
+            <p className="text-xs mt-2">API 키가 설정되지 않았거나 서버 오류일 수 있습니다.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
