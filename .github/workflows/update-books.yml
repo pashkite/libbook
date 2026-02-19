@@ -3,31 +3,43 @@ name: Update Daegu Library Books
 on:
   schedule:
     # 매주 월요일 오전 3시 (KST 기준)
-    - cron: '0 18 * * 0'  # UTC 18:00 = KST 03:00 (월요일)
-  workflow_dispatch:  # 수동 실행 가능
+    - cron: '0 18 * * 0' # UTC 18:00 = KST 03:00 (월요일)
+  workflow_dispatch: # 수동 실행 가능
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-daegu-books
+  cancel-in-progress: false
 
 jobs:
   update-books:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+          cache: npm
+
       - name: Install dependencies
-        run: npm install
-        
+        run: npm ci
+
       - name: Fetch Daegu library books
         env:
           JEONGBONAROU_API_KEY: ${{ secrets.JEONGBONAROU_API_KEY }}
         run: |
+          if [ -z "$JEONGBONAROU_API_KEY" ]; then
+            echo "❌ JEONGBONAROU_API_KEY secret is missing"
+            exit 1
+          fi
           npm run fetch:daegu-books
-          
+
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
