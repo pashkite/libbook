@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import BookCard from './BookCard';
 import { Book } from './types';
+import { DALSEONG_LIBRARIES } from '../services/api';
 
 interface BookListContainerProps {
   filter: 'all' | 'new' | 'popular';
-  selectedLibrary: string;
+  selectedLibraries: string[];
+  selectedRooms: string[];
 }
 
-const BookListContainer: React.FC<BookListContainerProps> = ({ filter, selectedLibrary }) => {
+const BookListContainer: React.FC<BookListContainerProps> = ({ 
+  filter, 
+  selectedLibraries,
+  selectedRooms 
+}) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,10 +56,20 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter, selectedL
   const getFilteredBooks = () => {
     let filtered = [...books];
 
-    // 도서관 필터
-    if (selectedLibrary !== 'all') {
-      filtered = filtered.filter(book => book.library === selectedLibrary);
+    // 도서관 복수 선택 필터
+    if (selectedLibraries.length > 0) {
+      // 도서관 코드를 이름으로 변환
+      const libraryNames = selectedLibraries.map(code => {
+        const lib = DALSEONG_LIBRARIES.find(l => l.code === code);
+        return lib ? lib.name : code;
+      });
+      filtered = filtered.filter(book => libraryNames.includes(book.library));
     }
+
+    // 자료실 필터 (아직 데이터에 없음 - 추후 API 연동 시 구현)
+    // if (selectedRooms.length > 0) {
+    //   filtered = filtered.filter(book => selectedRooms.includes(book.room));
+    // }
 
     // 탭 필터 적용
     if (filter === 'new') {
@@ -98,7 +114,7 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter, selectedL
   // 탭 변경 시 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
-  }, [filter, searchTerm, selectedLibrary]);
+  }, [filter, searchTerm, selectedLibraries, selectedRooms]);
 
   if (loading) {
     return (
@@ -116,15 +132,24 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter, selectedL
     return '도서 목록';
   };
 
+  const getSelectedLibraryNames = () => {
+    if (selectedLibraries.length === 0) return '전체 도서관';
+    if (selectedLibraries.length === DALSEONG_LIBRARIES.length) return '전체 도서관';
+    return selectedLibraries
+      .map(code => DALSEONG_LIBRARIES.find(l => l.code === code)?.name)
+      .filter(Boolean)
+      .join(', ');
+  };
+
   return (
     <main className="flex-1">
       <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-gray-800">{getTitle()}</h2>
-            {selectedLibrary !== 'all' && (
+            {selectedLibraries.length > 0 && (
               <p className="text-sm text-teal-600 mt-1">
-                {libraries.find(l => l.id === selectedLibrary)?.name || selectedLibrary}
+                {getSelectedLibraryNames()}
               </p>
             )}
             {filter === 'new' && (
@@ -212,21 +237,5 @@ const BookListContainer: React.FC<BookListContainerProps> = ({ filter, selectedL
     </main>
   );
 };
-
-const libraries = [
-  { id: 'all', name: '전체 도서관' },
-  { id: '국채보상운동기념도서관', name: '국채보상운동기념도서관' },
-  { id: '대구광역시립동부도서관', name: '동부도서관' },
-  { id: '대구광역시립 남부도서관', name: '남부도서관' },
-  { id: '대구광역시립서부도서관', name: '서부도서관' },
-  { id: '대구광역시립중앙도서관', name: '중앙도서관' },
-  { id: '달성군립도서관', name: '달성군립도서관' },
-  { id: '다사도서관', name: '다사도서관' },
-  { id: '논공도서관', name: '논공도서관' },
-  { id: '유가도서관', name: '유가도서관' },
-  { id: '화원도서관', name: '화원도서관' },
-  { id: '옥포도서관', name: '옥포도서관' },
-  { id: '구지도서관', name: '구지도서관' },
-];
 
 export default BookListContainer;
