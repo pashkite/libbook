@@ -3,6 +3,12 @@
 const API_KEY = import.meta.env.VITE_JEONGBONAROU_API_KEY;
 const BASE_URL = 'https://www.data4library.kr/api';
 
+// API 키 유효성 검사
+if (!API_KEY || API_KEY === 'your_api_key_here') {
+  console.warn('⚠️ 정보나루 API 키가 설정되지 않았습니다.');
+  console.warn('📝 .env 파일을 생성하고 VITE_JEONGBONAROU_API_KEY를 설정하세요.');
+}
+
 export interface JeongbonarouBook {
   no: string;
   bookname: string;
@@ -35,6 +41,11 @@ export async function searchBooks(
   pageNo: number = 1,
   pageSize: number = 20
 ): Promise<{ books: JeongbonarouBook[]; totalCount: number }> {
+  if (!API_KEY || API_KEY === 'your_api_key_here') {
+    console.error('API 키가 설정되지 않았습니다.');
+    return { books: [], totalCount: 0 };
+  }
+
   try {
     const url = `${BASE_URL}/srchBooks?authKey=${API_KEY}&keyword=${encodeURIComponent(keyword)}&pageNo=${pageNo}&pageSize=${pageSize}&format=json`;
     
@@ -70,6 +81,11 @@ export async function getLibraryHoldings(
   isbn: string,
   region: string = '대구'
 ): Promise<LibraryHolding[]> {
+  if (!API_KEY || API_KEY === 'your_api_key_here') {
+    console.error('API 키가 설정되지 않았습니다.');
+    return [];
+  }
+
   try {
     const url = `${BASE_URL}/libSrchByBook?authKey=${API_KEY}&isbn=${isbn}&region=${encodeURIComponent(region)}&format=json`;
     
@@ -105,6 +121,11 @@ export async function getPopularBooks(
   pageNo: number = 1,
   pageSize: number = 20
 ): Promise<{ books: PopularBook[]; totalCount: number }> {
+  if (!API_KEY || API_KEY === 'your_api_key_here') {
+    console.error('API 키가 설정되지 않았습니다.');
+    return { books: [], totalCount: 0 };
+  }
+
   try {
     const url = `${BASE_URL}/loanItemSrchByLib?authKey=${API_KEY}&libCode=${libCode}&startDt=${startDt}&endDt=${endDt}&pageNo=${pageNo}&pageSize=${pageSize}&format=json`;
     
@@ -142,6 +163,11 @@ export async function getNewBooks(
   pageNo: number = 1,
   pageSize: number = 20
 ): Promise<{ books: JeongbonarouBook[]; totalCount: number }> {
+  if (!API_KEY || API_KEY === 'your_api_key_here') {
+    console.error('API 키가 설정되지 않았습니다.');
+    return { books: [], totalCount: 0 };
+  }
+
   try {
     let url = `${BASE_URL}/newBooks?authKey=${API_KEY}&libCode=${libCode}&pageNo=${pageNo}&pageSize=${pageSize}&format=json`;
     
