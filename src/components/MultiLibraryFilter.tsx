@@ -82,7 +82,7 @@ const MultiLibraryFilter: React.FC<MultiLibraryFilterProps> = ({
       
       {selectedLibraries.length > 0 && (
         <button
-          onClick={() => onLibrariesChange([])
+          onClick={() => onLibrariesChange([])}
           className="mt-3 text-xs text-teal-600 hover:text-teal-700 underline w-full text-center"
         >
           필터 초기화
