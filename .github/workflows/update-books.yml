@@ -1,0 +1,37 @@
+name: Update Books Data
+
+on:
+  schedule:
+    # 매주 월요일 오전 3시 (KST 기준)
+    - cron: '0 18 * * 0'  # UTC 18:00 = KST 03:00 (월요일)
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  update-books:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm install node-fetch
+        
+      - name: Fetch library books
+        env:
+          API_KEY: ${{ secrets.JEONGBONAROU_API_KEY }}
+        run: |
+          node scripts/fetch-books.js
+          
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/books.json
+          git diff --quiet && git diff --staged --quiet || \
+            (git commit -m "chore: 도서 목록 자동 업데이트 $(date +'%Y-%m-%d')" && git push)
