@@ -1,167 +1,180 @@
-# 📚 달성군립도서관 도서 검색
+# 📚 LibBook - 달성군 도서관 통합 검색 시스템
 
-대구광역시 공공도서관 단행자료 현황 데이터를 활용한 달성군립도서관 도서 검색 웹사이트입니다.
+정보나루 API를 활용한 달성군 도서관 통합 검색 및 조회 서비스입니다.
 
-## 🌐 라이브 사이트
+## ✨ 주요 기능
 
-https://pashkite.github.io/libbook/
+### 🏢 도서관 복수 선택
+- 달성군립도서관, 다사도서관, 논공도서관 등 7개 도서관
+- 체크박스로 여러 도서관 동시 선택 가능
+- "전체 선택" 버튼으로 한 번에 선택/해제
 
-## ✨ 기능
+### 📖 자료실 필터
+- 일반자료실, 어린이자료실, 참고자료실 등
+- 복수 선택으로 원하는 자료실만 조회
 
-- 텍스트 기반 도서 검색 (도서명, 저자, 출판사)
-- 배가일자별 필터링
-- 다양한 정렬 옵션 (최신순, 오래된순, 제목순)
-- 페이지네이션
-- 반응형 디자인 (모바일 지원)
-- 데이터 실시간 새로고침 기능
-- 자동 데이터 업데이트 (GitHub Actions)
+### 📊 실시간 API 연동
+- **신착도서**: 도서관별 최신 소장 도서 실시간 조회
+- **인기도서**: 최근 1개월 대출 빈도 기준 인기 도서
+- **도서 검색**: 정보나루 API를 통한 통합 검색
 
-## 🛠️ 기술 스택
-
-- **Frontend**: HTML, CSS, JavaScript (Vanilla JS)
-- **Data Processing**: Python (pandas, openpyxl, requests)
-- **Automation**: GitHub Actions
-- **Hosting**: GitHub Pages
-- **Data Source**: 공공데이터포털 - 대구광역시 공공도서관 단행자료현황
-
-## 📄 데이터 소스
-
-공공데이터포털의 "대구광역시_공공도서관 단행자료현황" 데이터를 사용합니다.
-- 데이터셋 URL: https://www.data.go.kr/data/15089203/fileData.do
-
-### ⚠️ 주요 사항
-
-현재 저장소에는 **샘플 데이터가 포함**되어 있습니다. 실제 도서관 데이터를 사용하려면:
-
-1. **공공데이터포털 API 키 발급 필요**: 현재 Python 스크립트는 API 키 없이 파일 다운로드를 시도하기 때문에 실패합니다.
-2. **수동 데이터 업로드**: 공공데이터포털에서 XLSX 파일을 수동으로 다운로드하여 저장소의 `library_data.xlsx`로 업로드할 수 있습니다.
+### 🔍 검색 및 정렬
+- 제목/저자명 키워드 검색
+- 최신순, 오래된순, 제목순 정렬
+- 페이지네이션 지원
 
 ## 🚀 설치 및 실행
 
-### 1. 저장소 포크
+### 1. 환경 설정
 
 ```bash
+# 저장소 클론
 git clone https://github.com/pashkite/libbook.git
 cd libbook
+
+# 의존성 설치
+npm install
+
+# .env 파일 생성
+cp .env.example .env
 ```
 
-### 2. 로컬 테스트
+### 2. API 키 설정
 
-로컬 서버로 실행:
+`.env` 파일에 정보나루 API 키를 추가하세요:
+
+```env
+VITE_JEONGBONAROU_API_KEY=your_api_key_here
+```
+
+**API 키 발급 방법:**
+1. [공공데이터포털](https://www.data.go.kr/) 회원가입
+2. "도서관 정보나루" 검색
+3. 활용신청 후 승인
+4. 발급받은 인증키를 `.env`에 입력
+
+### 3. 개발 서버 실행
 
 ```bash
-python -m http.server 8000
+npm run dev
 ```
 
-그리고 브라우저에서 `http://localhost:8000` 접속
+브라우저에서 `http://localhost:5173` 접속
 
-### 3. GitHub Pages 설정
-
-1. GitHub 저장소의 Settings > Pages로 이동
-2. Source: "Deploy from a branch" 선택
-3. Branch: `main` / `/ (root)` 선택
-4. Save 클릭
-
-몇 분 후 https://[username].github.io/libbook/ 에서 확인 가능
-
-## 🔄 데이터 업데이트
-
-### 자동 업데이트
-
-- **매주 월요일 오전 9시(KST)** 자동 실행
-- GitHub Actions에서 자동으로 데이터 다운로드 및 업데이트
-
-### 수동 업데이트
-
-1. **GitHub Actions 사용**:
-   - 저장소의 Actions 탭으로 이동
-   - "Update Library Books Data" 워크플로우 선택
-   - "Run workflow" 버튼 클릭
-
-2. **로컬에서 실행**:
+### 4. 프로덕션 빌드
 
 ```bash
-python scripts/fetch_books.py
+npm run build
+npm run preview
 ```
 
-### 실제 데이터 사용하기
+## 📦 기술 스택
 
-#### 방법 1: 수동 다운로드 (권장)
+- **Frontend**: React 18 + TypeScript
+- **Build Tool**: Vite 5
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **API**: 정보나루 (도서관 정보나루) 공공 API
+- **Deployment**: GitHub Pages
 
-1. https://www.data.go.kr/data/15089203/fileData.do 접속
-2. "대구광역시_공공도서관 단행자료현황" XLSX 파일 다운로드
-3. 저장소 루트에 `library_data.xlsx` 파일명으로 저장
-4. `python scripts/fetch_books.py` 실행
-5. 생성된 `books.json` 파일을 커밋 및 푸시
-
-#### 방법 2: API 키 설정 (향후 개선 예정)
-
-향후 버전에서 API 키를 사용하도록 스크립트를 개선할 예정입니다.
-
-## 🤔 문제 해결
-
-### 사이트에서 데이터가 표시되지 않아요
-
-1. **books.json 파일 확인**: 저장소에 `books.json` 파일이 있는지 확인
-2. **GitHub Pages 빌드 상태**: Settings > Pages에서 배포 상태 확인
-3. **캐시 문제**: 브라우저 강력 새로고침 (Ctrl+Shift+R / Cmd+Shift+R)
-4. **사이트의 '데이터 새로고침' 버튼 클릭**
-
-### GitHub Actions가 실패해요
-
-현재는 정상입니다! 공공데이터포털에서 데이터 다운로드가 실패하면:
-- 스크립트는 자동으로 샘플 데이터를 생성합니다
-- 실제 데이터는 위의 "실제 데이터 사용하기" 섹션 참고
-
-### 필터링이 작동하지 않아요
-
-- `books.json` 파일의 `library` 필드에 "달성", "다사", "논공" 등의 키워드가 포함되어 있는지 확인
-- Python 스크립트의 `LIBRARY_KEYWORDS` 변수를 수정하여 재실행
-
-## 💻 개발 가이드
-
-### 프로젝트 구조
+## 🏗️ 프로젝트 구조
 
 ```
 libbook/
-├── index.html              # 메인 웹 페이지
-├── books.json              # 도서 데이터 (JSON)
-├── .nojekyll              # Jekyll 빌드 비활성화
-├── scripts/
-│   └── fetch_books.py     # 데이터 다운로드 및 변환 스크립트
-├── .github/
-│   └── workflows/
-│       └── update-data.yml # GitHub Actions 워크플로우
-└── README.md
+├── src/
+│   ├── components/
+│   │   ├── App.tsx                   # 메인 앱
+│   │   ├── Header.tsx                # 상단 헤더 & 탭
+│   │   ├── SidebarFilters.tsx        # 사이드바 필터
+│   │   ├── MultiLibraryFilter.tsx    # 도서관 복수 선택
+│   │   ├── RoomFilter.tsx            # 자료실 필터
+│   │   ├── BookListContainer.tsx     # 도서 목록 컨테이너
+│   │   ├── BookCard.tsx              # 도서 카드
+│   │   ├── KDCFilterTree.tsx         # KDC 분류 트리
+│   │   └── DateRangeFilter.tsx       # 날짜 범위 필터
+│   ├── services/
+│   │   └── api.ts                    # 정보나루 API 서비스
+│   ├── main.tsx
+│   └── vite-env.d.ts                 # Vite 타입 정의
+├── public/
+│   └── books.json                    # 폴백용 샘플 데이터
+├── .env.example                      # 환경변수 예시
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
-### Python 스크립트 수정
+## 🔧 환경 변수
 
-`scripts/fetch_books.py`를 수정하여:
-- 다른 도서관 필터링
-- 추가 데이터 필드 처리
-- 데이터 포맷 변경
+| 변수명 | 설명 | 필수 여부 |
+|--------|------|----------|
+| `VITE_JEONGBONAROU_API_KEY` | 정보나루 API 인증키 | ✅ 필수 |
 
-### 웹 인터페이스 커스터마이징
+## 🚀 배포
 
-`index.html`의 CSS 변수를 수정하여 색상 테마 변경:
+GitHub Pages를 통해 자동 배포됩니다.
 
-```css
-:root {
-    --color-primary: #2563eb;        /* 메인 색상 */
-    --color-primary-hover: #1d4ed8;  /* 호버 색상 */
-    --color-success: #10b981;        /* 성공 메시지 색상 */
-    /* ... */
-}
+1. **GitHub Secrets 설정**
+   - Repository Settings → Secrets → Actions
+   - `VITE_JEONGBONAROU_API_KEY` 추가
+
+2. **자동 배포**
+   - `main` 브랜치에 push 시 자동 배포
+   - GitHub Actions 워크플로우가 자동 실행
+   - 빌드 완료 후 `gh-pages` 브랜치에 배포
+
+3. **접속 URL**
+   - https://pashkite.github.io/libbook
+
+## 📝 API 사용법
+
+### 신착도서 조회
+```typescript
+import { getNewBooks } from './services/api';
+
+const books = await getNewBooks('LIB140001', 'adult', 1, 20);
 ```
 
-## 📝 라이선스
+### 인기도서 조회
+```typescript
+import { getPopularBooks } from './services/api';
+
+const popularBooks = await getPopularBooks(
+  'LIB140001',
+  '2026-01-01',
+  '2026-02-01',
+  1,
+  20
+);
+```
+
+### 도서 검색
+```typescript
+import { searchBooks } from './services/api';
+
+const searchResults = await searchBooks('파친코', 1, 20);
+```
+
+## 🎯 개발 로드맵
+
+- [x] 도서관 복수 선택 기능
+- [x] 정보나루 API 연동
+- [x] 신착도서 실시간 조회
+- [x] 인기도서 실시간 조회
+- [ ] 도서관별 소장 정보 조회
+- [ ] 대출 가능 여부 실시간 확인
+- [ ] KDC 분류별 필터링
+- [ ] 날짜 범위 필터 구현
+- [ ] 도서 상세 정보 모달
+- [ ] 북마크 기능
+
+## 📄 라이선스
 
 MIT License
 
-## 🙏 기여
+## 🤝 기여
 
-기여를 환영합니다!
+Pull Request를 환영합니다!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -171,8 +184,8 @@ MIT License
 
 ## 📧 문의
 
-문제가 있거나 개선 제안이 있으면 [Issues](https://github.com/pashkite/libbook/issues)에 등록해주세요.
+프로젝트에 대한 문의사항이나 버그 리포트는 [Issues](https://github.com/pashkite/libbook/issues)에 등록해주세요.
 
 ---
 
-**Made with ❤️ for 달성군립도서관**
+**Made with ❤️ for 달성군 도서관 이용자**
