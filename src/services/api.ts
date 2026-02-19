@@ -35,6 +35,47 @@ export interface PopularBook extends JeongbonarouBook {
   loanCnt: string;
 }
 
+// 도서관 장서 조회 API (itemSrch)
+export async function getLibraryBooks(
+  libCode: string,
+  pageNo: number = 1,
+  pageSize: number = 100
+): Promise<{ books: JeongbonarouBook[]; totalCount: number }> {
+  if (!API_KEY || API_KEY === 'your_api_key_here') {
+    console.error('API 키가 설정되지 않았습니다.');
+    return { books: [], totalCount: 0 };
+  }
+
+  try {
+    const url = `${BASE_URL}/itemSrch?authKey=${API_KEY}&libCode=${libCode}&pageNo=${pageNo}&pageSize=${pageSize}&format=json`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.response?.resultNum === 0) {
+      return { books: [], totalCount: 0 };
+    }
+
+    const books = Array.isArray(data.response?.docs)
+      ? data.response.docs.map((doc: any) => doc.doc)
+      : data.response?.docs?.doc
+      ? [data.response.docs.doc]
+      : [];
+
+    return {
+      books,
+      totalCount: parseInt(data.response?.numFound || data.response?.resultNum || '0')
+    };
+  } catch (error) {
+    console.error('도서관 장서 조회 실패:', error);
+    return { books: [], totalCount: 0 };
+  }
+}
+
 // 도서 검색 API
 export async function searchBooks(
   keyword: string,
@@ -169,32 +210,19 @@ export async function getNewBooks(
   }
 
   try {
-    let url = `${BASE_URL}/newBooks?authKey=${API_KEY}&libCode=${libCode}&pageNo=${pageNo}&pageSize=${pageSize}&format=json`;
-    
-    if (ageType) {
-      url += `&ageType=${ageType}`;
-    }
-    
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (data.response?.resultNum === 0) {
-      return { books: [], totalCount: 0 };
-    }
-    
-    const books = Array.isArray(data.response?.docs)
-      ? data.response.docs.map((doc: any) => doc.doc)
-      : data.response?.docs?.doc
-      ? [data.response.docs.doc]
-      : [];
-    
+    // data4library에는 /newBooks 엔드포인트가 없어 itemSrch 결과를 소장일 기준으로 정렬해 신착 목록으로 사용
+    // ageType 파라미터는 itemSrch에서 직접 지원하지 않아 현재는 사용하지 않음
+    void ageType;
+    const { books, totalCount } = await getLibraryBooks(libCode, pageNo, pageSize);
+    const sortedByShelvingDate = [...books].sort((a, b) => {
+      const aDate = (a as any).shelving_date || '';
+      const bDate = (b as any).shelving_date || '';
+      return String(bDate).localeCompare(String(aDate));
+    });
+
     return {
-      books,
-      totalCount: parseInt(data.response?.resultNum || '0')
+      books: sortedByShelvingDate,
+      totalCount
     };
   } catch (error) {
     console.error('신착 도서 조회 실패:', error);
