@@ -4,6 +4,7 @@ export interface Book {
   author: string;
   publisher: string;
   coverImage?: string;
+  imageUrl?: string;
   callNumber: string;
   acquisitionDate: string;
   library: string;
