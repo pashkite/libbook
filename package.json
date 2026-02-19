@@ -14,7 +14,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fetch:daegu-books": "node scripts/fetch-daegu-books.js"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",
