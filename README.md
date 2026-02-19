@@ -41,6 +41,9 @@ JEONGBONAROU_API_KEY=발급받은키 npm run fetch:daegu-books
 
 - Secrets 필요값: `JEONGBONAROU_API_KEY`
 - 변경 시 `public/books.json` 자동 커밋
+- 저장소 Settings → Actions에서 `Read and write permissions` 허용 필요
+- 처음 1회는 Actions의 `workflow_dispatch`로 수동 실행해서 샘플 `books.json`을 실제 수집 데이터로 교체하세요.
+- 워크플로우가 바로 실패하면 `JEONGBONAROU_API_KEY` 시크릿 설정 여부와 Actions 권한(읽기/쓰기), 기본 브랜치 보호 규칙을 먼저 확인하세요.
 
 ## 참고
 
